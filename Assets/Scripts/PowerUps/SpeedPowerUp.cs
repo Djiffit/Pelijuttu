@@ -8,14 +8,14 @@ public class SpeedPowerUp : PowerUp {
     protected override void Init()
     {
         base.Init();
-        player.maxSpeed += speedBoost;
+        player.speed += speedBoost;
     }
 
     private void OnDestroy()
     {
         if (player != null)
         {
-            player.maxSpeed -= speedBoost;
+            player.speed -= speedBoost;
         }
     }
 }
