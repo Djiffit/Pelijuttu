@@ -7,6 +7,8 @@ public class PowerUp : MonoBehaviour
 
     protected PlayerController player = null;
 
+    public AudioClip activationSound;
+
     protected virtual void Init()
     {
         if (isTimed)
@@ -17,6 +19,8 @@ public class PowerUp : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            AudioSource.PlayClipAtPoint(activationSound, transform.position);
+
             // The type of this power-up
             System.Type type = this.GetType();
 
