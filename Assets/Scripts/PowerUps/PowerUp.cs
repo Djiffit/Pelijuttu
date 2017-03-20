@@ -5,7 +5,7 @@ public class PowerUp : MonoBehaviour
     public bool isTimed = false;
     public float lifeTime = 5f;
 
-    protected Player player = null;
+    protected PlayerController player = null;
 
     protected virtual void Init()
     {
@@ -33,7 +33,7 @@ public class PowerUp : MonoBehaviour
                 }
 
                 // Attach player to the power-up and initialize
-                po.player = other.gameObject.GetComponent<Player>();
+                po.player = other.gameObject.GetComponent<PlayerController>();
                 po.Init();
 
                 // Destroy the power-up collectable object
