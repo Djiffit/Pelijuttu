@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
     public GameObject player;
     public float heightDamping = 2.0f;
     public float rotationDamping = 0.5f;
+    public float speedMultiplier = 0.05f;
 
     private float offsetHorizontal;
     private float offsetVertical;
