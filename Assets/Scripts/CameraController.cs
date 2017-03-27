@@ -8,35 +8,32 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     public GameObject player;
-    public float speed = 100;
+    public float heightDamping = 2.0f;
+    public float rotationDamping = 0.5f;
 
     private float offsetHorizontal;
     private float offsetVertical;
-    private float xRotation;
-
-    float heightDamping = 2.0f;
-    float rotationDamping = 3.0f;
 
     // Use this for initialization
     void Start () {
         Vector3 offset = transform.position - player.transform.position;
         offsetHorizontal = Vector3.Magnitude(new Vector3(offset.x, 0f, offset.y));
         offsetVertical = offset.y;
-        xRotation = transform.rotation.eulerAngles.x;
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
 
         // Calculate the current rotation angles
-        Vector3 velocity = player.GetComponent<Rigidbody>().velocity.normalized;
+        Vector3 velocity = player.GetComponent<Rigidbody>().velocity;
         Quaternion lookRotation = Quaternion.LookRotation(velocity);
         float wantedRotationAngle = lookRotation.eulerAngles.y;
         float wantedHeight = player.transform.position.y + offsetVertical;
         float currentRotationAngle = transform.eulerAngles.y;
         float currentHeight = transform.position.y;
+        float speed = Vector3.Magnitude(velocity) * 0.05f;
         // Damp the rotation around the y-axis
-        currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, wantedRotationAngle, rotationDamping * Time.deltaTime);
+        currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, wantedRotationAngle, rotationDamping * Time.deltaTime * speed);
         // Damp the height
         currentHeight = Mathf.Lerp(currentHeight, wantedHeight, heightDamping * Time.deltaTime);
         // Convert the angle into a rotation
