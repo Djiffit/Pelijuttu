@@ -8,14 +8,14 @@ public class ZeroGravity : PowerUp
     protected override void Init()
     {
         base.Init();
-        Rigidbody playerRB = player.GetComponent<Rigidbody>();
+        Rigidbody playerRB = playerController.GetComponent<Rigidbody>();
         playerRB.useGravity = false;
     }
     private void OnDestroy()
     {
-        if (player != null)
+        if (playerController != null)
         {
-            Rigidbody playerRB = player.GetComponent<Rigidbody>();
+            Rigidbody playerRB = playerController.GetComponent<Rigidbody>();
             playerRB.useGravity = true;
         }
     }

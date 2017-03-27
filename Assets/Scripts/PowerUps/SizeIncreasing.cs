@@ -9,13 +9,13 @@ public class SizeIncreasing : PowerUp
     protected override void Init()
     {
         base.Init();
-        player.transform.localScale += increase;
+        playerController.transform.localScale += increase;
     }
     private void OnDestroy()
     {
-        if (player != null)
+        if (playerController != null)
         {
-            player.transform.localScale -= increase;
+            playerController.transform.localScale -= increase;
         }
     }
 }

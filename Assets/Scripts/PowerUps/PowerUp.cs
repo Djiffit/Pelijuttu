@@ -5,7 +5,8 @@ public class PowerUp : MonoBehaviour
     public bool isTimed = false;
     public float lifeTime = 5f;
 
-    protected PlayerController player = null;
+    protected GameObject player = null;
+    protected PlayerController playerController = null;
 
     public AudioClip activationSound;
 
@@ -37,7 +38,8 @@ public class PowerUp : MonoBehaviour
                 }
 
                 // Attach player to the power-up and initialize
-                po.player = other.gameObject.GetComponent<PlayerController>();
+                po.player = other.gameObject;
+                po.playerController = other.gameObject.GetComponent<PlayerController>();
                 po.Init();
 
                 // Destroy the power-up collectable object
