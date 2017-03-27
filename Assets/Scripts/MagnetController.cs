@@ -34,7 +34,7 @@ public class MagnetController : MonoBehaviour {
                 {
                     // Distance needs to be inverted to make force stronger when closer
                     float invertedDistance = radius - distance;
-                    Vector3 force = distanceVector.normalized * invertedDistance * power;
+                    Vector3 force = distanceVector.normalized * invertedDistance * power * Time.deltaTime;
                     player.GetComponent<Rigidbody>().AddForce(force);
                 }
             }
