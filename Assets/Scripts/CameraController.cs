@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Vector3 offset = transform.position - player.transform.position;
-        offsetHorizontal = Vector3.Magnitude(new Vector3(offset.x, 0f, offset.y));
+        offsetHorizontal = Vector3.Magnitude(new Vector3(offset.x, 0f, offset.z));
         offsetVertical = offset.y;
 	}
 	

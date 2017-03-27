@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
             movement = Camera.main.transform.TransformDirection(movement).normalized;
             movement.y = 0;
 
-            rigidbody.AddForce(movement * speed);
+            rigidbody.AddForce(movement * speed * rigidbody.mass);
         }
 	}
 }
