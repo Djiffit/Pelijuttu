@@ -9,20 +9,19 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 		rigidbody = GetComponent<Rigidbody> ();
-	}
+    }
 
-	void Update () {
-        if (Time.timeScale != 0)
-        {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
+    void Update () {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * speed * Time.deltaTime;
 
-            movement = Camera.main.transform.TransformDirection(movement).normalized;
-            movement.y = 0;
+        // Calculate movement direction in relation to camera
+        Vector3 movementDirection = Camera.main.transform.TransformDirection(movement);
+        movementDirection.y = 0;
+        movementDirection = movementDirection.normalized;
 
-            rigidbody.AddForce(movement * speed * rigidbody.mass);
-        }
+        rigidbody.AddForce(movement.magnitude * movementDirection);
 	}
 }

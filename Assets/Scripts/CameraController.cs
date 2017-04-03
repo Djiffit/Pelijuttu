@@ -11,41 +11,77 @@ public class CameraController : MonoBehaviour {
     public float heightDamping = 2.0f;
     public float rotationDamping = 0.5f;
     public float speedMultiplier = 0.05f;
+    public float turnWaitTime = 2f;
+    public float turnRecoveryTime = 2f;
 
-    private float offsetHorizontal;
-    private float offsetVertical;
+    public float controllerSpeedVertical = 1f;
+    public float controllerSpeedHorizontal = 1f;
+
+    public float mouseSpeed = 1f;
+
+    private float offset;
+    private float lastTurnTime;
 
     // Use this for initialization
     void Start () {
-        Vector3 offset = transform.position - player.transform.position;
-        offsetHorizontal = Vector3.Magnitude(new Vector3(offset.x, 0f, offset.z));
-        offsetVertical = offset.y;
-	}
-	
-	// Update is called once per frame
-	void LateUpdate () {
+        Vector3 offsetVector = transform.position - player.transform.position;
+        offset = Vector3.Magnitude(offsetVector);
+        lastTurnTime = Time.time - turnWaitTime;
+    }
 
-        // Calculate the current rotation angles
-        Vector3 velocity = player.GetComponent<Rigidbody>().velocity;
-        Quaternion lookRotation = Quaternion.LookRotation(velocity);
-        float wantedRotationAngle = lookRotation.eulerAngles.y;
-        float wantedHeight = player.transform.position.y + offsetVertical;
-        float currentRotationAngle = transform.eulerAngles.y;
-        float currentHeight = transform.position.y;
-        float speed = Vector3.Magnitude(velocity) * 0.05f;
-        // Damp the rotation around the y-axis
-        currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, wantedRotationAngle, rotationDamping * Time.deltaTime * speed);
-        // Damp the height
-        currentHeight = Mathf.Lerp(currentHeight, wantedHeight, heightDamping * Time.deltaTime);
-        // Convert the angle into a rotation
-        Quaternion currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
-        // Set the position of the camera on the x-z plane to:
-        // distance meters behind the target
+    // Update is called once per frame
+    void LateUpdate () {
+        // Get the current rotation of the camera
+        float currentRotationAngleY = transform.eulerAngles.y;
+        float currentRotationAngleX = transform.eulerAngles.x;
+
+        // Get input
+        float moveHorizontalController = Input.GetAxis("CameraHorizontal");
+        float moveVerticalController = Input.GetAxis("CameraVertical");
+        float moveHorizontalMouse = Input.GetAxis("Mouse X");
+        float moveVerticalMouse = Input.GetAxis("Mouse Y");
+
+        float timeSinceLastTurn = Time.time - lastTurnTime;
+
+        if (moveHorizontalController != 0 || moveVerticalController != 0)
+        {
+            // Rotate based on controller thumbsticks
+            currentRotationAngleY += moveHorizontalController * controllerSpeedHorizontal * Time.deltaTime;
+            currentRotationAngleX += moveVerticalController * controllerSpeedVertical * Time.deltaTime;
+            lastTurnTime = Time.time;
+        }
+        else if (moveHorizontalMouse != 0 || moveVerticalMouse != 0)
+        {
+            // Rotate based on mouse
+            currentRotationAngleY += moveHorizontalMouse * mouseSpeed;
+            currentRotationAngleX += moveVerticalMouse * mouseSpeed;
+            lastTurnTime = Time.time;
+        }
+        else if (timeSinceLastTurn > turnWaitTime)
+        {
+            // Rotate camera towards player movement direction
+            Vector3 velocity = player.GetComponent<Rigidbody>().velocity;
+            velocity.y = 0;
+            Quaternion playerDirection = Quaternion.LookRotation(velocity);
+            float wantedRotationAngle = playerDirection.eulerAngles.y;
+
+            // Calculate rotation speed
+            float speed = Vector3.Magnitude(velocity) * Time.deltaTime * rotationDamping * speedMultiplier;
+            float timeOverWaitTime = timeSinceLastTurn - turnWaitTime;
+            if (timeOverWaitTime < turnWaitTime)
+                speed *= timeOverWaitTime / turnWaitTime;
+
+            // Lerp the Y angle rotation
+            currentRotationAngleY = Mathf.LerpAngle(currentRotationAngleY, wantedRotationAngle, speed);
+        }
+
+        Quaternion currentRotation = Quaternion.Euler(currentRotationAngleX, currentRotationAngleY, 0);
+
+        // Set camera behind the player based on rotation and initial offset
         Vector3 position = player.transform.position;
-        position -= currentRotation * Vector3.forward * offsetHorizontal;
-        position.y = currentHeight;
-        // Set the height of the camera
+        position -= currentRotation * Vector3.forward * offset;
         transform.position = position;
+
         // Always look at the target
         transform.LookAt(player.transform);
     }
