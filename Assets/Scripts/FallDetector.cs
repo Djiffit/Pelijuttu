@@ -13,17 +13,20 @@ public class FallDetector : MonoBehaviour {
 	void Start () {
         // Find the lowest y coordinate
         GameObject[] gameObjects = GameObject.FindObjectsOfType<GameObject>();
-        y = gameObjects[0].transform.position.y;
+        y = player.transform.position.y;
 
         foreach (GameObject obj in gameObjects)
         {
-            if (obj.transform.position.y < y)
-                y = obj.transform.position.y;
+            if (obj.GetComponent<Collider>())
+            {
+                if (obj.transform.position.y < y)
+                    y = obj.transform.position.y;
+            }
         }
 	}
 	
 	void LateUpdate () {
-		// Check if player has fallen
+        // Check if player has fallen
         if (y - player.transform.position.y > maxDistance)
         {
             // Reset scene
