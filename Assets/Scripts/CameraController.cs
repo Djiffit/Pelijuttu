@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour {
     public float zoomSpeed = 10f;
     public float minOffset = 1;
     public float maxOffset = 30f;
+    public float scrollZoomDamping = 2f;
 
     public float controllerSpeedVertical = 1f;
     public float controllerSpeedHorizontal = 1f;
@@ -20,22 +21,39 @@ public class CameraController : MonoBehaviour {
     public float mouseSpeed = 1f;
 
     private float lastTurnTime;
+    private float offSetTarget;
 
     // Use this for initialization
     void Start () {
         lastTurnTime = Time.time - turnWaitTime;
         transform.Rotate(new Vector3(initialXRotation, 0f, 0f));
+        offSetTarget = offset;
     }
 
     // Update is called once per frame
     void LateUpdate () {
         if (Time.timeScale == 0) return;
 
-        // Zoom
+        // Zoom input
         float zoomInScroll = Input.GetAxis("Mouse ScrollWheel");
         float zoomInController = Input.GetAxis("ZoomIn");
-        offset += zoomInController * zoomSpeed * Time.deltaTime;
-        offset += zoomInScroll * zoomSpeed;
+
+        if (zoomInController != 0)
+        {
+            offset += zoomInController * zoomSpeed * Time.deltaTime;
+            offSetTarget = offset;
+        }
+        
+        if (zoomInScroll != 0)
+        {
+            offSetTarget = offset + zoomInScroll * zoomSpeed;
+        }
+
+        // Lerp offset towards target
+        if (offset != offSetTarget)
+        {
+            offset = Mathf.Lerp(offset, offSetTarget, scrollZoomDamping * Time.deltaTime);
+        }
 
         // Check that zoom doesn't go too far
         if (offset < minOffset)
