@@ -10,6 +10,9 @@ public class CameraController : MonoBehaviour {
     public float turnRecoveryTime = 2f;
     public float offset = 15f;
     public float initialXRotation = 30f;
+    public float zoomSpeed = 10f;
+    public float minOffset = 1;
+    public float maxOffset = 30f;
 
     public float controllerSpeedVertical = 1f;
     public float controllerSpeedHorizontal = 1f;
@@ -27,6 +30,18 @@ public class CameraController : MonoBehaviour {
     // Update is called once per frame
     void LateUpdate () {
         if (Time.timeScale == 0) return;
+
+        // Zoom
+        float zoomInScroll = Input.GetAxis("Mouse ScrollWheel");
+        float zoomInController = Input.GetAxis("ZoomIn");
+        offset += zoomInController * zoomSpeed * Time.deltaTime;
+        offset += zoomInScroll * zoomSpeed;
+
+        // Check that zoom doesn't go too far
+        if (offset < minOffset)
+            offset = minOffset;
+        else if (offset > maxOffset)
+            offset = maxOffset;
 
         // Get the current rotation of the camera
         float currentRotationAngleY = transform.eulerAngles.y;
