@@ -1,36 +1,33 @@
-﻿/*
-    Code based on: http://answers.unity3d.com/questions/38526/smooth-follow-camera.html
-*/
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     public GameObject player;
-    public float heightDamping = 2.0f;
     public float rotationDamping = 0.5f;
     public float speedMultiplier = 0.05f;
     public float turnWaitTime = 2f;
     public float turnRecoveryTime = 2f;
+    public float offset = 15f;
+    public float initialXRotation = 30f;
 
     public float controllerSpeedVertical = 1f;
     public float controllerSpeedHorizontal = 1f;
 
     public float mouseSpeed = 1f;
 
-    private float offset;
     private float lastTurnTime;
 
     // Use this for initialization
     void Start () {
-        Vector3 offsetVector = transform.position - player.transform.position;
-        offset = Vector3.Magnitude(offsetVector);
         lastTurnTime = Time.time - turnWaitTime;
+        transform.Rotate(new Vector3(initialXRotation, 0f, 0f));
     }
 
     // Update is called once per frame
     void LateUpdate () {
+        if (Time.timeScale == 0) return;
+
         // Get the current rotation of the camera
         float currentRotationAngleY = transform.eulerAngles.y;
         float currentRotationAngleX = transform.eulerAngles.x;
@@ -62,17 +59,21 @@ public class CameraController : MonoBehaviour {
             // Rotate camera towards player movement direction
             Vector3 velocity = player.GetComponent<Rigidbody>().velocity;
             velocity.y = 0;
-            Quaternion playerDirection = Quaternion.LookRotation(velocity);
-            float wantedRotationAngle = playerDirection.eulerAngles.y;
 
-            // Calculate rotation speed
-            float speed = Vector3.Magnitude(velocity) * Time.deltaTime * rotationDamping * speedMultiplier;
-            float timeOverWaitTime = timeSinceLastTurn - turnWaitTime;
-            if (timeOverWaitTime < turnWaitTime)
-                speed *= timeOverWaitTime / turnWaitTime;
+            if (Vector3.Magnitude(velocity) != 0)
+            {
+                Quaternion playerDirection = Quaternion.LookRotation(velocity);
+                float wantedRotationAngle = playerDirection.eulerAngles.y;
 
-            // Lerp the Y angle rotation
-            currentRotationAngleY = Mathf.LerpAngle(currentRotationAngleY, wantedRotationAngle, speed);
+                // Calculate rotation speed
+                float speed = Vector3.Magnitude(velocity) * Time.deltaTime * rotationDamping * speedMultiplier;
+                float timeOverWaitTime = timeSinceLastTurn - turnWaitTime;
+                if (timeOverWaitTime < turnWaitTime)
+                    speed *= timeOverWaitTime / turnWaitTime;
+
+                // Lerp the Y angle rotation
+                currentRotationAngleY = Mathf.LerpAngle(currentRotationAngleY, wantedRotationAngle, speed);
+            }
         }
 
         Quaternion currentRotation = Quaternion.Euler(currentRotationAngleX, currentRotationAngleY, 0);
