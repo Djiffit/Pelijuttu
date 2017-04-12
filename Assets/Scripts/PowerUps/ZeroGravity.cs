@@ -11,8 +11,9 @@ public class ZeroGravity : PowerUp
         Rigidbody playerRB = playerController.GetComponent<Rigidbody>();
         playerRB.useGravity = false;
     }
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (playerController != null)
         {
             Rigidbody playerRB = playerController.GetComponent<Rigidbody>();

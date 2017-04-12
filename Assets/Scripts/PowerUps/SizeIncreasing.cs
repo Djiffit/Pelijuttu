@@ -11,8 +11,9 @@ public class SizeIncreasing : PowerUp
         base.Init();
         playerController.transform.localScale += increase;
     }
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (playerController != null)
         {
             playerController.transform.localScale -= increase;

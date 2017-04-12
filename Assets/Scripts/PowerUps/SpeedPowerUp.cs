@@ -11,8 +11,9 @@ public class SpeedPowerUp : PowerUp {
         playerController.speed += speedBoost;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (playerController != null)
         {
             playerController.speed -= speedBoost;

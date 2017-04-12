@@ -3,9 +3,11 @@
 public class PowerUp : MonoBehaviour
 {
     public bool isTimed = false;
+    public bool respawns = true;
     public float lifeTime = 5f;
 
     protected GameObject player = null;
+    protected GameObject collectableObject;
     protected PlayerController playerController = null;
 
     public AudioClip activationSound;
@@ -42,9 +44,16 @@ public class PowerUp : MonoBehaviour
                 po.playerController = other.gameObject.GetComponent<PlayerController>();
                 po.Init();
 
-                // Destroy the power-up collectable object
-                Destroy(gameObject);
+                // Attach this collectable object
+                po.collectableObject = gameObject;
+                gameObject.SetActive(false);
             }
         }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (respawns  && collectableObject != null)
+            collectableObject.SetActive(true);
     }
 }

@@ -44,8 +44,9 @@ public class Magnet : PowerUp
         }
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (playerMaterial != null)
         {
             playerMaterial.color = playerColor;

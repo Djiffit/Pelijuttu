@@ -11,8 +11,9 @@ public class SizeDecreasing : PowerUp
         base.Init();
         playerController.transform.localScale -= decrease;
     }
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (playerController != null)
         {
             playerController.transform.localScale += decrease;
