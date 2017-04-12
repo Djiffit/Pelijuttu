@@ -4,53 +4,27 @@ using UnityEngine;
 
 public class Bouncer : MonoBehaviour {
     public GameObject target;
-    public float bounceSpeed;
-    public float returnSpeed;
+    public float bounceForce;
     public float distance;
 
     private float startPositionY;
-    private bool active;
-    private bool goingUp;
     private Rigidbody rb;
+    private bool bouncing = false;
 
     private void Start()
     {
-        goingUp = true;
         startPositionY = target.transform.position.y;
         rb = target.GetComponent<Rigidbody>();
     }
 
-	void LateUpdate () {
-		if (active)
+    void LateUpdate () {
+        if (target.transform.position.y <= startPositionY)
         {
-            Vector3 position = target.transform.position;
-            if (goingUp)
-            {
-                // Move up
-                position.y += bounceSpeed * Time.deltaTime;
-
-                // Check if full distance traveled
-                if (position.y - startPositionY >= distance)
-                {
-                    goingUp = false;
-                }
-            }
-            else
-            {
-                // Move down
-                position.y -= returnSpeed * Time.deltaTime;
-
-                // Check if returned
-                if (position.y <= startPositionY)
-                {
-                    position.y = startPositionY;
-                    goingUp = true;
-                    active = false;
-                }
-            }
-
-            // Set new position
-            rb.MovePosition(position);
+            bouncing = false;
+        }
+        else if (target.transform.position.y - startPositionY >= distance)
+        {
+            rb.velocity = new Vector3(0f, 0f, 0f);
         }
 	}
 
@@ -58,7 +32,11 @@ public class Bouncer : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            active = true;
+            if (!bouncing)
+            {
+                bouncing = true;
+                rb.AddForce(0f, bounceForce, 0f);
+            }
         }
     }
 }
