@@ -21,9 +21,6 @@ public class TileMovementCircular : MonoBehaviour {
         initialAngle = Vector3.Angle(pivot.forward, offsetVector) + 180f;
         angleTimeRatio = 360f / RoundTripTime;
         startTime = Time.time;
-        Debug.Log(gameObject.name);
-        Debug.Log(initialAngle);
-        Debug.Log(offsetVector);
     }
 
     void FixedUpdate()
