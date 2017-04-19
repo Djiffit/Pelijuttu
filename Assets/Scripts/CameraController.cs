@@ -28,6 +28,8 @@ public class CameraController : MonoBehaviour {
         lastTurnTime = Time.time - turnWaitTime;
         transform.Rotate(new Vector3(initialXRotation, 0f, 0f));
         offSetTarget = offset;
+        //QualitySettings.vSyncCount = 0;  // VSync must be disabled
+        //Application.targetFrameRate = 45;
     }
 
     // Update is called once per frame
@@ -108,6 +110,10 @@ public class CameraController : MonoBehaviour {
                 currentRotationAngleY = Mathf.LerpAngle(currentRotationAngleY, wantedRotationAngle, speed);
             }
         }
+
+        // Prevent camera turning too much up or down
+        if (currentRotationAngleX >= 89.5f && currentRotationAngleX <= 270.5f)
+            currentRotationAngleX = transform.eulerAngles.x;
 
         Quaternion currentRotation = Quaternion.Euler(currentRotationAngleX, currentRotationAngleY, 0);
 

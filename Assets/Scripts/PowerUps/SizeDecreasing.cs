@@ -9,7 +9,12 @@ public class SizeDecreasing : PowerUp
     protected override void Init()
     {
         base.Init();
+
+        if (player.GetComponent<SizeIncreasing>())
+            Destroy(player.GetComponent<SizeIncreasing>());
+
         playerController.transform.localScale -= decrease;
+
     }
     protected override void OnDestroy()
     {
