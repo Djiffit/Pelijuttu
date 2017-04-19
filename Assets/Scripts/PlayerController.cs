@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody> ();
     }
 
-    void Update () {
+    void FixedUpdate () {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
