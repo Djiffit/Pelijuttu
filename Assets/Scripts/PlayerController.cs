@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
+    public Text gemText;
+    private int count;
 	private Rigidbody rigidbody;
 	public float speed = 5f;
 
 	void Start () {
 		rigidbody = GetComponent<Rigidbody> ();
+        count = 0;
+        SetGemText();
     }
 
     void FixedUpdate () {
@@ -24,4 +29,19 @@ public class PlayerController : MonoBehaviour {
 
         rigidbody.AddForce(movement.magnitude * movementDirection);
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Gem"))
+        {
+            count++;
+            SetGemText();
+        }
+    }
+
+
+    void SetGemText()
+    {
+        gemText.text = count.ToString();
+    }
 }
