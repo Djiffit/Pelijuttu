@@ -44,4 +44,9 @@ public class PlayerController : MonoBehaviour {
     {
         gemText.text = count.ToString();
     }
+
+    public int GemCount
+    {
+        get { return count; }
+    }
 }
