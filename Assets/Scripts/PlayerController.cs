@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody> ();
         count = 0;
         SetGemText();
+        LevelStatistics.gemsInLevel = GameObject.FindGameObjectsWithTag("Gem").Length;
     }
 
     void FixedUpdate () {

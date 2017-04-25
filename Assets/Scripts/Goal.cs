@@ -13,7 +13,6 @@ public class Goal : MonoBehaviour {
             LevelStatistics.completionTime = Time.timeSinceLevelLoad;
 
             LevelStatistics.gemsCollected = other.gameObject.GetComponent<PlayerController>().GemCount;
-            LevelStatistics.gemsInLevel = GameObject.FindGameObjectsWithTag("Gem").Length;
 
             LevelStatistics.thisLevel = SceneManager.GetActiveScene().buildIndex;
             LevelStatistics.nextLevel = SceneManager.GetActiveScene().buildIndex + 1; 
