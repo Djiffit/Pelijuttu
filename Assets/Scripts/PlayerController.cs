@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * speed * Time.deltaTime;
+        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * speed * rigidbody.mass * Time.deltaTime;
 
         // Calculate movement direction in relation to camera
         Vector3 movementDirection = Camera.main.transform.TransformDirection(movement);
