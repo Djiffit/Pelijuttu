@@ -22,11 +22,14 @@ public class PauseController : MonoBehaviour {
             {
                 Time.timeScale = 0;
                 pauseMenu.SetActive(true);
+                Cursor.visible = true;
             }
             else if (Time.timeScale == 0)
             {
                 Time.timeScale = 1;
+                Cursor.visible = false;
                 pauseMenu.SetActive(false);
+                
             }
         }
     }
@@ -37,11 +40,13 @@ public class PauseController : MonoBehaviour {
         {
             Time.timeScale = 0;
             pauseMenu.SetActive(true);
+            Cursor.visible = true;
         }
         else if (Time.timeScale == 0)
         {
             Time.timeScale = 1;
             pauseMenu.SetActive(false);
+            Cursor.visible = false;
         }
     }
 
