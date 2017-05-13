@@ -23,6 +23,8 @@ public class PauseController : MonoBehaviour {
                 Time.timeScale = 0;
                 pauseMenu.SetActive(true);
                 Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.None;
             }
             else if (Time.timeScale == 0)
             {

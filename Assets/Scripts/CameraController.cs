@@ -37,18 +37,18 @@ public class CameraController : MonoBehaviour {
         if (Time.timeScale == 0) return;
 
         // Zoom input
-        float zoomInScroll = Input.GetAxis("Mouse ScrollWheel");
-        float zoomInController = Input.GetAxis("ZoomIn");
+        float zoomScroll = Input.GetAxis("Mouse ScrollWheel");
+        float zoomController = Input.GetAxis("ZoomIn");
 
-        if (zoomInController != 0)
+        if (zoomController != 0)
         {
-            offset += zoomInController * zoomSpeed * Time.deltaTime;
+            offset += zoomController * zoomSpeed * Time.deltaTime;
             offSetTarget = offset;
         }
         
-        if (zoomInScroll != 0)
+        if (zoomScroll != 0)
         {
-            offSetTarget = offset + zoomInScroll * zoomSpeed;
+            offSetTarget = offset - zoomScroll * zoomSpeed;
         }
 
         // Lerp offset towards target
