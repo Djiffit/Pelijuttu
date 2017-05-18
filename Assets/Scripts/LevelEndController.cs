@@ -20,7 +20,11 @@ public class LevelEndController : MonoBehaviour {
             Destroy(nextLevel.gameObject);
         }
 
-	}
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
+
+    }
 
     public void MainMenuPress()
     {
